@@ -1,0 +1,26 @@
+Задание 2
+
+### Type your code here
+!pip install numpy
+import numpy as np
+c = np.array([1., 2.94, -2.2, 0.1])
+b=np.array([0.6,3.2,-1.8,0.05])
+n=(c@b)/(np.linalg.norm(c)*np.linalg.norm(b))
+print(n)
+
+Задание 3
+
+!pip install pandas 
+import pandas as pd
+s = pd.Series(data=['1', 5, 3.1, 'hello', -5, -1000, 12.78, 'world', 10.10, '!', 98], 
+              index=range(6, 28, 2))
+s1=pd.Series(data=s.values, index=range(4,15))
+print(s1)
+s2=list()
+for i in s:
+    if type(i)==int :
+        s2.append(i)
+print(s2)
+print(np.var(s2,ddof=0))
+#dis=np.var
+### Type your code here
