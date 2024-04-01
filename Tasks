@@ -24,3 +24,45 @@ print(s2)
 print(np.var(s2,ddof=0))
 #dis=np.var
 ### Type your code here
+
+Задание 4
+
+tr_mcc_codes = pd.read_csv("C:/Users/Honor/Documents/NumpyJupiter-main/NumpyJupiter-main/tr_mcc_codes.csv", sep=';')
+tr_types = pd.read_csv("C:/Users/Honor/Documents/NumpyJupiter-main/NumpyJupiter-main/tr_types.csv", sep=';')
+transactions = pd.read_csv("C:/Users/Honor/Documents/NumpyJupiter-main/NumpyJupiter-main/transactions.csv", sep=',')
+gender_train = pd.read_csv("C:/Users/Honor/Documents/NumpyJupiter-main/NumpyJupiter-main/gender_train.csv", sep=',')
+
+transactions = transactions.iloc[:1000001]
+transactions.set_index('customer_id', inplace=True)
+print(transactions)
+
+client = transactions.loc[transactions.amount.idxmax()]
+print(client)
+
+print(pd.DataFrame(map(abs, client.amount)).value_counts().head(1))
+
+client2 = transactions.loc[transactions.amount.idxmin()]
+print(client)
+
+Задание 5
+
+transactions = transactions.merge(gender_train, how="left", on="customer_id").merge(tr_mcc_codes, how="inner", on="mcc_code").merge(tr_types, how="inner", on="tr_type")
+del tr_mcc_codes, gender_train, tr_types
+
+print(transactions)
+
+Задание 6
+
+man = transactions.loc[(transactions.gender == 1.0) & (transactions.amount < 0)]
+woman = transactions.loc[(transactions.gender == 0) & (transactions.amount < 0)]
+print(abs(man.amount.median() - woman.amount.median()))
+
+Задание 7
+
+tr2 = transactions.copy()
+tr2["tr_day"] = pd.Series(map(lambda x: x.split()[0], tr2.tr_datetime))
+ftr = tr2.groupby(['tr_type', 'tr_day'])['mcc_code'].nunique().reset_index(name="numcc")
+ftr = ftr[ftr['numcc'] > 29]
+tr2 = tr2[tr2['tr_type'].isin(ftr['tr_type'])]
+print(tr2)
+
